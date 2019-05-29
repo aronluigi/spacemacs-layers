@@ -7,7 +7,9 @@
 
 ;;;;;;;;;; Theme configuration
 ;; doom theme
-(setq doom-themes-enable-bold t
+(setq nlinum-highlight-current-line t
+      doom-modeline-height 15
+      doom-themes-enable-bold t
       doom-themes-enable-italic t
       ;; https://github.com/hlissner/emacs-doom-themes/wiki
       doom-neotree-enable-file-icons t

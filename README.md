@@ -9,10 +9,10 @@ transient.el:1088:1:Warning: Alias for `transient--original-buffer' should be de
 OSX Emacs install
 
 ```shell
-brew tap d12frosted/emacs-plus
-brew update
-
+brew tap d12frosted/emacs-plus && \
 brew install emacs-plus --HEAD --with-jansson --with-modern-icon --with-dbus --with-mailutils
+
+brew tap homebrew/cask-fonts && brew cask install font-source-code-pro
 
 # Monikube & docker
 brew cask install minikube

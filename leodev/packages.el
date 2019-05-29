@@ -2,12 +2,15 @@
 
 (setq leodev-packages '(
                         all-the-icons
-                        all-the-icons-ivy
-                        all-the-icons-dired
+                        ;; all-the-icons-ivy
+                        ;; all-the-icons-dired
                         mode-icons
                         doom-themes
+                        doom-modeline
                         solaire-mode
                         web-mode
+                        spaceline-all-the-icons
+                        hlinum
                         ;; protobuf-mode
                         ))
 
@@ -24,29 +27,29 @@
       (add-to-list 'all-the-icons-mode-icon-alist `(hy-mode           ,@hy-icon))
       (add-to-list 'all-the-icons-mode-icon-alist `(graphviz-dot-mode ,@dt-icon)))))
 
-;; All-the-icons-ivy
-(defun leodev/init-all-the-icons-ivy ()
-  (use-package all-the-icons-ivy
-    :config
-    (progn
-      ;; Fix icon prompt alignment in ivy prompts
-      (advice-add 'all-the-icons-ivy-file-transformer :override
-                  'all-the-icons-ivy-file-transformer-stdized)
+;; ;; All-the-icons-ivy
+;; (defun leodev/init-all-the-icons-ivy ()
+;;   (use-package all-the-icons-ivy
+;;     :config
+;;     (progn
+;;       ;; Fix icon prompt alignment in ivy prompts
+;;       (advice-add 'all-the-icons-ivy-file-transformer :override
+;;                   'all-the-icons-ivy-file-transformer-stdized)
 
-      ;; Add behavior to counsel projectile funcs too
-      (advice-add 'counsel-projectile-find-file-transformer :filter-return
-                  'all-the-icons-ivy-file-transformer-stdized)
-      (advice-add 'counsel-projectile-transformer :filter-return
-                  'all-the-icons-ivy-file-transformer-stdized)
+;;       ;; Add behavior to counsel projectile funcs too
+;;       (advice-add 'counsel-projectile-find-file-transformer :filter-return
+;;                   'all-the-icons-ivy-file-transformer-stdized)
+;;       (advice-add 'counsel-projectile-transformer :filter-return
+;;                   'all-the-icons-ivy-file-transformer-stdized)
 
-      (all-the-icons-ivy-setup))))
+;;       (all-the-icons-ivy-setup))))
 
-;; All-the-icons-dired
-(defun leodev/init-all-the-icons-dired ()
-  (use-package all-the-icons-dired
-    :hook (dired-mode . all-the-icons-dired-mode)))
+;; ;; All-the-icons-dired
+;; (defun leodev/init-all-the-icons-dired ()
+;;   (use-package all-the-icons-dired
+;;     :hook (dired-mode . all-the-icons-dired-mode)))
 
-;; mode icons
+;; ;; mode icons
 (defun leodev/init-mode-icons ()
   (use-package mode-icons))
 
@@ -57,7 +60,7 @@
     :init
     (progn
       ;; (global-linum-mode)
-      (global-company-mode t)
+      ;; (global-company-mode t)
       ;; (spaceline-compile)
 
       (load-theme 'doom-vibrant t)
@@ -70,14 +73,20 @@
       ;; Corrects (and improves) org-mode's native fontification.
       (doom-themes-org-config))))
 
+;; doom-modeline
+(defun leodev/init-doom-modeline ()
+  (use-package doom-modeline
+    :ensure t
+    :hook (after-init . doom-modeline-mode)))
+
 ;; mode icons
 (defun leodev/init-solaire-mode ()
   (use-package solaire-mode
-    :hook(
-          (after-change-major-mode-hook . turn-on-solaire-mode)
-          (after-revert-hook . turn-on-solaire-mode)
-          (minibuffer-setup-hook . solaire-mode-in-minibuffer)
-          (ediff-prepare-buffer-hook . solaire-mode))))
+    :hook
+    ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
+    (minibuffer-setup . solaire-mode-in-minibuffer)
+    :config
+    (solaire-mode-swap-bg)))
 
 ;; web-mode
 (defun leodev/post-init-web-mode ()
@@ -92,3 +101,20 @@
   (add-hook 'web-mode-hook (lambda ()
                              (setq web-mode-markup-indent-offset 4)
                              (setq web-mode-code-indent-offset 4))))
+;; mode icons
+(defun leodev/init-spaceline-all-the-icons ()
+  (use-package spaceline-all-the-icons
+    :after spaceline
+    :config
+    (progn
+      (spaceline-all-the-icons-theme)
+      (spaceline-all-the-icons--setup-anzu)            ;; Enable anzu searching
+      (spaceline-all-the-icons--setup-package-updates) ;; Enable package update indicator
+      (spaceline-all-the-icons--setup-git-ahead)       ;; Enable # of commits ahead of upstream in git
+      (spaceline-all-the-icons--setup-paradox)         ;; Enable Paradox mode line
+      (spaceline-all-the-icons--setup-neotree)         ;; Enable Neotree mode line
+      )))
+
+(defun leodev/init-hlinum ()
+  (use-package hlinum
+    :after (hlinum-activate)))
