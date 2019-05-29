@@ -1,5 +1,10 @@
 ;; -*- mode: emacs-lisp -*-
 
+(setq projectile-enable-caching t
+      powerline-default-separator 'nil
+      ;; mac-command-modifier 'control
+      evil-want-fine-undo nil)
+
 ;;;;;;;;;; Theme configuration
 ;; doom theme
 (setq doom-themes-enable-bold t

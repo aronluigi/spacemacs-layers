@@ -56,6 +56,10 @@
     :ensure t
     :init
     (progn
+      ;; (global-linum-mode)
+      (global-company-mode t)
+      ;; (spaceline-compile)
+
       (load-theme 'doom-vibrant t)
       ;; Enable flashing mode-line on errors
       (doom-themes-visual-bell-config)

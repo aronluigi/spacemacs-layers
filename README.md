@@ -80,7 +80,7 @@ mv .emacs.d .emacs.d.BACKUP
 
 git clone https://github.com/syl20bnr/spacemacs.git .emacs.d
 cd .emacs.d/private
-git clone git@github.com:aronluigi/spacemacs-layers.git +leodev
+git clone --recursive git@github.com:aronluigi/spacemacs-layers.git +leodev
 
 cp +abingham/dot.spacemacs ~/.spacemacs
 # ...edit ~/.spacemacs as necessary, e.g. for ycmd paths, etc...
