@@ -12,7 +12,9 @@
    '(
      helm
      deft
-     osx
+     (osx :variables
+          osx-dictionary-dictionary-choice "English"
+          osx-use-option-as-meta t)
      dash
      octave
      erc
@@ -24,7 +26,7 @@
      emacs-lisp
      git
      docker
-     markdown
+     (markdown :variables markdown-live-preview-engine 'vmd)
      org
      (shell :variables
             shell-default-height 20
@@ -44,6 +46,20 @@
      python
      scheme
      yaml
+     (haskell :variables
+              haskell-completion-backend 'intero
+              haskell-enable-hindent-style "johan-tibell"
+              haskell-indentation-where-post-offset 1
+              haskell-interactive-mode-hide-multi-line-errors nil
+              haskell-process-prompt-restart-on-cabal-change nil
+              haskell-process-suggest-remove-import-lines nil
+              haskell-stylish-on-save t
+              haskell-tags-on-save t)
+     extra-langs
+     ruby
+     sql
+     react
+     java
      )
    dotspacemacs-additional-packages '(all-the-icons
                                       all-the-icons-dired
@@ -157,22 +173,16 @@ before packages are loaded. If you are unsure, you should try in setting them in
   ;; GLOBAL
   (setq
    anzu-cons-mode-line-p nil
-   scroll-error-top-bottom t
    shell-pop-full-span nil
    evil-want-fine-undo t
    ispell-program-name "aspell"
    indent-buffer-modes '(scss-mode)
    anzu-mode-line-update-function 'spacemacs/anzu-update-mode-line
    projectile-enable-caching t
-   projectile-use-git-grep t
-   global-hl-line-mode t
-   global-page-break-lines-mode t)
+   projectile-use-git-grep t)
 
   (diff-hl-flydiff-mode '(:global t))
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  ;; (add-hook 'after-init-hook #'global-flycheck-mode)
-  ;; (spacemacs/toggle-auto-fill-mode-on)
-  ;; (fringe-mode '(nil . 0))
 
   (use-package all-the-icons :ensure t)
   (use-package all-the-icons-dired
@@ -230,8 +240,13 @@ before packages are loaded. If you are unsure, you should try in setting them in
     (highlight-indent-guides-method 'character))
 
   (use-package hl-fill-column
+    :requires (doom-themes)
     :ensure t
-    :hook ((text-mode prog-mode conf-mode) . hl-fill-column-mode))
+    :hook ((text-mode prog-mode conf-mode) . hl-fill-column-mode)
+    :config
+    (setq bg (car (cdr (assq 'base0 doom-themes--colors)))
+          fg (car (cdr (assq 'cyan doom-themes--colors))))
+    (custom-set-faces `(hl-fill-column-face ((t (:background ,bg :foreground ,fg))))))
 
   (use-package hl-todo
     :hook (prog-mode . hl-todo-mode)

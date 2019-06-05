@@ -1,16 +1,31 @@
-# spacemacs-layers
+# Doom Spacemacs layer
+![](screenshot.png)
 
-install
-```
-https://github.com/domtronn/all-the-icons.el
+### Spacemacs layer setup
+```shell
+# go your home directory, or wherever you want .emacs.d
+cd ~
+
+# (optional) move any existing .emacs.d out of the way
+mv .emacs.d .emacs.d.BACKUP
+
+git clone https://github.com/syl20bnr/spacemacs.git .emacs.d
+cd .emacs.d/private
+git clone --recursive git@github.com:aronluigi/spacemacs-layers.git +leodev
+
+cp +leodev/dotspacemacs ~/.spacemacs
+# ...edit ~/.spacemacs as necessary, e.g. for ycmd paths, etc...
 ```
 
-OSX Emacs install
+
+#### OSX system requirements
+Install [all-the-icons](https://github.com/domtronn/all-the-icons.el)
 
 ```shell
-brew tap d12frosted/emacs-plus && \
-brew install emacs-plus --HEAD --with-jansson --with-modern-icon --with-dbus --with-mailutils
+# install emacs
+brew tap d12frosted/emacs-plus && brew install emacs-plus --HEAD --with-jansson --with-modern-icon --with-dbus --with-mailutils
 
+# install some more fonts
 brew tap homebrew/cask-fonts && brew cask install font-source-code-pro
 
 # Monikube & docker
@@ -18,6 +33,7 @@ brew cask install \
      minikube \
      mactex \
 
+# install system tools
 brew install \
     coreutils \
     ack \
@@ -32,9 +48,8 @@ brew install \
     r \
     scala \
     sbt \
-    terminal-notifier \
+    terminal-notifier
     
-
 # NodeJS & JavaScript tools
 npm install -g \
     vmd \
@@ -68,25 +83,6 @@ pip install \
 # Ruby tools
 gem install pry
 ```
-#### Fonts
-https://github.com/domtronn/all-the-icons.el#resource-fonts
-
 #### Scala
 https://ensime.github.io/build_tools/sbt/#install
 
-
-
-```shell
-# go your home directory, or wherever you want .emacs.d
-cd ~
-
-# (optional) move any existing .emacs.d out of the way
-mv .emacs.d .emacs.d.BACKUP
-
-git clone https://github.com/syl20bnr/spacemacs.git .emacs.d
-cd .emacs.d/private
-git clone --recursive git@github.com:aronluigi/spacemacs-layers.git +leodev
-
-cp +abingham/dot.spacemacs ~/.spacemacs
-# ...edit ~/.spacemacs as necessary, e.g. for ycmd paths, etc...
-```
