@@ -1,0 +1,366 @@
+;; -*- mode: emacs-lisp -*-
+;; This file is loaded by Spacemacs at startup.
+;; It must be stored in your home directory.
+
+(defun dotspacemacs/layers () ;
+  (setq-default
+   dotspacemacs-distribution 'spacemacs
+   dotspacemacs-enable-lazy-installation 'unused
+   dotspacemacs-ask-for-lazy-installation t
+   dotspacemacs-configuration-layer-path '()
+   dotspacemacs-configuration-layers
+   '(
+     helm
+     deft
+     (osx :variables
+          osx-dictionary-dictionary-choice "English"
+          osx-use-option-as-meta t)
+     dash
+     octave
+     erc
+     (auto-completion :variables
+                      auto-completion-enable-help-tooltip t
+                      auto-completion-enable-snippets-in-popup t
+                      auto-completion-enable-sort-by-usage t)
+     better-defaults
+     emacs-lisp
+     git
+     docker
+     (markdown :variables markdown-live-preview-engine 'vmd)
+     org
+     (shell :variables
+            shell-default-height 20
+            shell-default-position 'bottom
+            shell-default-shell 'eshell
+            shell-protect-eshell-prompt t)
+     spell-checking
+     syntax-checking
+     colors
+     (version-control :variables
+                      version-control-diff-tool 'diff-hl
+                      version-control-global-margin t
+                      version-control-diff-side 'left)
+     csv
+     html
+     javascript
+     python
+     scheme
+     yaml
+     (haskell :variables
+              haskell-completion-backend 'intero
+              haskell-enable-hindent-style "johan-tibell"
+              haskell-indentation-where-post-offset 1
+              haskell-interactive-mode-hide-multi-line-errors nil
+              haskell-process-prompt-restart-on-cabal-change nil
+              haskell-process-suggest-remove-import-lines nil
+              haskell-stylish-on-save t
+              haskell-tags-on-save t)
+     extra-langs
+     ruby
+     sql
+     react
+     java
+     )
+   dotspacemacs-additional-packages '(all-the-icons
+                                      all-the-icons-dired
+                                      arduino-mode
+                                      deferred
+                                      doom-themes
+                                      doom-modeline
+                                      edit-indirect
+                                      solaire-mode
+                                      eldoc-eval
+                                      highlight-indent-guides
+                                      hl-fill-column
+                                      hl-todo
+                                      evil-goggles
+                                      unicode-fonts
+                                      realgud ;; debugger
+                                      direnv
+                                      makefile-executor
+                                      editorconfig
+                                      evil-anzu
+                                      powerline
+                                      scss-mode
+                                      simpleclip
+                                      string-inflection
+                                      evil-string-inflection
+                                      yasnippet-snippets
+                                      (multiple-cursors :location (recipe :fetcher github
+                                                                          :repo "jacobono/multiple-cursors.el"
+                                                                          :branch "evil-ways")))
+   dotspacemacs-frozen-packages '()
+   dotspacemacs-excluded-packages '()
+   dotspacemacs-install-packages 'used-only))
+
+(defun dotspacemacs/init ()
+  (setq-default
+   dotspacemacs-elpa-https t
+   dotspacemacs-elpa-timeout 5
+   dotspacemacs-check-for-update nil
+   dotspacemacs-elpa-subdirectory nil
+   dotspacemacs-editing-style 'vim
+   dotspacemacs-verbose-loading nil
+   dotspacemacs-startup-banner "~/.emacs.d/private/+leodev/banner.png"
+   dotspacemacs-startup-lists '((recents . 5)
+                                (projects . 7))
+   dotspacemacs-startup-buffer-responsive t
+   dotspacemacs-scratch-mode 'text-mode
+   dotspacemacs-themes '(doom-vibrant
+                         spacemacs-dark
+                         spacemacs-light)
+   dotspacemacs-colorize-cursor-according-to-state t
+   dotspacemacs-default-font '("Source Code Pro for Powerline"
+                               :size 13
+                               :weight normal
+                               :width normal
+                               :powerline-scale 1.1)
+   dotspacemacs-leader-key "SPC"
+   dotspacemacs-emacs-command-key "SPC"
+   dotspacemacs-ex-command-key ":"
+   dotspacemacs-emacs-leader-key "M-m"
+   dotspacemacs-major-mode-leader-key ","
+   dotspacemacs-major-mode-emacs-leader-key "C-M-m"
+   dotspacemacs-distinguish-gui-tab nil
+   dotspacemacs-remap-Y-to-y$ nil
+   dotspacemacs-retain-visual-state-on-shift t
+   dotspacemacs-visual-line-move-text nil
+   dotspacemacs-ex-substitute-global nil
+   dotspacemacs-default-layout-name "Default"
+   dotspacemacs-display-default-layout nil
+   dotspacemacs-auto-resume-layouts nil
+   dotspacemacs-large-file-size 1
+   dotspacemacs-auto-save-file-location 'cache
+   dotspacemacs-max-rollback-slots 50
+   dotspacemacs-helm-resize nil
+   dotspacemacs-helm-no-header nil
+   dotspacemacs-helm-position 'bottom
+   dotspacemacs-helm-use-fuzzy 'always
+   dotspacemacs-enable-paste-transient-state nil
+   dotspacemacs-which-key-delay 0.4
+   dotspacemacs-which-key-position 'bottom
+   dotspacemacs-loading-progress-bar t
+   dotspacemacs-fullscreen-at-startup nil
+   dotspacemacs-fullscreen-use-non-native nil
+   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-active-transparency 90
+   dotspacemacs-inactive-transparency 90
+   dotspacemacs-show-transient-state-title t
+   dotspacemacs-show-transient-state-color-guide t
+   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-smooth-scrolling t
+   dotspacemacs-line-numbers 'relative
+   dotspacemacs-folding-method 'evil
+   dotspacemacs-smartparens-strict-mode nil
+   dotspacemacs-smart-closing-parenthesis nil
+   dotspacemacs-highlight-delimiters 'all
+   dotspacemacs-persistent-server nil
+   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
+   dotspacemacs-default-package-repository nil
+   dotspacemacs-whitespace-cleanup nil
+   ))
+
+(defun dotspacemacs/user-init ()
+  "Initialization function for user code.
+It is called immediately after `dotspacemacs/init', before layer configuration
+executes.
+ This function is mostly useful for variables that need to be set
+before packages are loaded. If you are unsure, you should try in setting them in
+`dotspacemacs/user-config' first."
+  )
+
+(defun dotspacemacs/user-config ()
+  ;; GLOBAL
+  (setq
+   anzu-cons-mode-line-p nil
+   shell-pop-full-span nil
+   evil-want-fine-undo t
+   ispell-program-name "aspell"
+   indent-buffer-modes '(scss-mode)
+   anzu-mode-line-update-function 'spacemacs/anzu-update-mode-line
+   projectile-enable-caching t
+   projectile-use-git-grep t)
+
+  (diff-hl-flydiff-mode '(:global t))
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+
+  (use-package all-the-icons :ensure t)
+  (use-package all-the-icons-dired
+    :ensure t
+    :hook (dired-mode . all-the-icons-dired-mode))
+
+  (use-package unicode-fonts
+    :ensure t
+    :custom (unicode-fonts-force-multi-color-on-mac t)
+    :config (unicode-fonts-setup))
+
+  (use-package doom-themes
+    :ensure t
+    :custom
+    (doom-themes-enable-bold t)
+    (doom-themes-enable-italic t)
+    (nlinum-highlight-current-line t)
+    :config
+    (load-theme 'doom-vibrant t)
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+    ;; Enable custom neotree theme (all-the-icons must be installed!)
+    (doom-themes-neotree-config)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config)
+    :init
+    (setq vcm (car (cdr (assq 'vc-modified doom-themes--colors)))
+          vcd (car (cdr (assq 'vc-deleted doom-themes--colors)))
+          vca (car (cdr (assq 'vc-added doom-themes--colors))))
+    (custom-set-faces
+     `(diff-hl-change ((t (:background ,(doom-darken vcm 0.60)))))
+     `(diff-hl-insert ((t (:background ,(doom-darken vca 0.60)))))
+     `(diff-hl-delete ((t (:background ,(doom-darken vcd 0.60)))))))
+
+  (use-package doom-modeline
+    :ensure t
+    :requires (all-the-icons)
+    :custom (doom-modeline-height 25)
+    :hook (after-init . doom-modeline-mode)
+    :init (doom-modeline-mode 1))
+
+  (use-package solaire-mode
+    :ensure t
+    :hook
+    ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
+    (minibuffer-setup . solaire-mode-in-minibuffer)
+    :config (solaire-mode-swap-bg))
+
+  (use-package highlight-indent-guides
+    :ensure t
+    :hook
+    ((prog-mode text-mode conf-mode) . highlight-indent-guides-mode)
+    (focus-in . highlight-indent-guides-auto-set-faces)
+    :custom
+    (highlight-indent-guides-method 'character))
+
+  (use-package hl-fill-column
+    :requires (doom-themes)
+    :ensure t
+    :hook ((text-mode prog-mode conf-mode) . hl-fill-column-mode)
+    :config
+    (setq bg (car (cdr (assq 'base0 doom-themes--colors)))
+          fg (car (cdr (assq 'cyan doom-themes--colors))))
+    (custom-set-faces `(hl-fill-column-face ((t (:background ,bg :foreground ,fg))))))
+
+  (use-package hl-todo
+    :hook (prog-mode . hl-todo-mode)
+    :ensure t
+    :config
+    (define-key hl-todo-mode-map (kbd "C-c p") 'hl-todo-previous)
+    (define-key hl-todo-mode-map (kbd "C-c n") 'hl-todo-next)
+    (define-key hl-todo-mode-map (kbd "C-c o") 'hl-todo-occur)
+    (define-key hl-todo-mode-map (kbd "C-c i") 'hl-todo-insert)
+    (setq hl-todo-keyword-faces
+          `(("TODO"  . ,(face-foreground 'warning))
+            ("FIXME" . ,(face-foreground 'error))
+            ("NOTE"  . ,(face-foreground 'success)))))
+
+  (use-package neotree
+    :custom
+    (neo-create-file-auto-open nil)
+    (neo-auto-indent-point nil)
+    (neo-autorefresh nil)
+    (neo-mode-line-type 'none)
+    (neo-window-width 28)
+    (neo-show-updir-line nil)
+    (neo-theme 'nerd) ; fallback
+    (neo-banner-message nil)
+    (neo-confirm-create-file #'off-p)
+    (neo-confirm-create-directory #'off-p)
+    (neo-show-hidden-files nil)
+    (neo-keymap-style 'concise)
+    (neo-show-hidden-files t)
+    (neo-hidden-regexp-list
+     '(;; vcs folders
+       "^\\.\\(?:git\\|hg\\|svn\\)$"
+       ;; compiled files
+       "\\.\\(?:pyc\\|o\\|elc\\|lock\\|css.map\\|class\\)$"
+       ;; generated files, caches or local pkgs
+       "^\\(?:node_modules\\|vendor\\|.\\(project\\|cask\\|yardoc\\|sass-cache\\)\\)$"
+       ;; org-mode folders
+       "^\\.\\(?:sync\\|export\\|attach\\)$"
+       ;; temp files
+       "~$"
+       "^#.*#$")))
+
+  (use-package evil-goggles
+    :ensure t
+    :custom
+    (evil-goggles-duration 0.200)
+    ;; (evil-goggles-pulse nil) ; too slow
+    (evil-goggles-enable-delete nil)
+    (evil-goggles-enable-change nil)
+    :config (setq evil-goggles-pulse nil)
+    :init
+    (evil-goggles-mode)
+    (evil-goggles-use-diff-faces))
+
+  ;; TODO - remove this when merged to spacemacs master
+  (use-package realgud
+    :defer t
+    :init
+    (progn
+      (defvar debug-additional-debuggers '()
+        "Additional RealGUD debuggers to be autoloaded.")
+
+      (defun spacemacs/debug-short-key-state (mode-on)
+        "Set evil-evilified-state explicitly."
+        (if mode-on
+            (evil-evilified-state)
+          (evil-normal-state)))
+
+      (defun spacemacs/debug-generate-symbol (debugger)
+        "Create RealGUD interactive function name from DEBUGGER."
+        (intern (concat "realgud:" debugger)))
+
+      (dolist (debugger (mapcar 'spacemacs/debug-generate-symbol
+                                debug-additional-debuggers))
+        (autoload debugger "realgud" nil t))
+      (advice-add 'realgud-short-key-mode-setup
+                  :before #'spacemacs/debug-short-key-state)
+      (evilified-state-evilify-map realgud:shortkey-mode-map
+        :eval-after-load realgud
+        :mode realgud-short-key-mode
+        :bindings
+        "bb" 'realgud:cmd-break
+        "bc" 'realgud:cmd-clear
+        "bd" 'realgud:cmd-delete
+        "bs" 'realgud:cmd-disable
+        "be" 'realgud:cmd-enable
+        "c" 'realgud:cmd-continue
+        "i" 'realgud:cmd-step
+        "J" 'realgud:cmd-jump
+        "o" 'realgud:cmd-finish
+        "q" 'realgud:cmd-quit
+        "r" 'realgud:cmd-restart
+        "s" 'realgud:cmd-next
+        "S" 'realgud-window-cmd-undisturb-src
+        "v" 'realgud:cmd-eval-dwim)))
+
+  (use-package direnv
+    :ensure t
+    :config
+    (direnv-mode))
+
+  (use-package magit-gitflow
+    :ensure t
+    :hook (magit-mode . turn-on-magit-gitflow))
+
+  (use-package makefile-executor
+    :config
+    (add-hook 'makefile-mode-hook 'makefile-executor-mode))
+
+  (use-package editorconfig
+    :ensure t
+    :config
+    (editorconfig-mode 1))
+  (use-package evil-string-inflection :ensure t)
+  )
+;; Do not write anything past this comment. This is where Emacs will
+;; auto-generate custom variable definitions.
