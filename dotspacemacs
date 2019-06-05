@@ -86,6 +86,7 @@
                                       string-inflection
                                       evil-string-inflection
                                       yasnippet-snippets
+                                      beacon-mode
                                       (multiple-cursors :location (recipe :fetcher github
                                                                           :repo "jacobono/multiple-cursors.el"
                                                                           :branch "evil-ways")))
@@ -179,7 +180,8 @@ before packages are loaded. If you are unsure, you should try in setting them in
    indent-buffer-modes '(scss-mode)
    anzu-mode-line-update-function 'spacemacs/anzu-update-mode-line
    projectile-enable-caching t
-   projectile-use-git-grep t)
+   projectile-use-git-grep t
+   beacon-mode t)
 
   (diff-hl-flydiff-mode '(:global t))
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
@@ -293,7 +295,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
     :ensure t
     :custom
     (evil-goggles-duration 0.200)
-    ;; (evil-goggles-pulse nil) ; too slow
+    (evil-goggles-pulse t) ; too slow
     (evil-goggles-enable-delete nil)
     (evil-goggles-enable-change nil)
     :config (setq evil-goggles-pulse nil)
