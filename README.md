@@ -1,9 +1,8 @@
 # spacemacs-layers
-Warm
 
-https://github.com/syl20bnr/spacemacs/blob/master/doc/DOCUMENTATION.org#transient-states
+install
 ```
-transient.el:1088:1:Warning: Alias for `transient--original-buffer' should be declared before its referent
+https://github.com/domtronn/all-the-icons.el
 ```
 
 OSX Emacs install
@@ -15,7 +14,9 @@ brew install emacs-plus --HEAD --with-jansson --with-modern-icon --with-dbus --w
 brew tap homebrew/cask-fonts && brew cask install font-source-code-pro
 
 # Monikube & docker
-brew cask install minikube
+brew cask install \
+     minikube \
+     mactex \
 
 brew install \
     coreutils \
@@ -30,7 +31,9 @@ brew install \
     go \
     r \
     scala \
-    sbt
+    sbt \
+    terminal-notifier \
+    
 
 # NodeJS & JavaScript tools
 npm install -g \
@@ -41,7 +44,9 @@ npm install -g \
     babel-eslint \
     eslint-plugin-react \
     jshint \
-    js-yaml
+    js-yaml \
+    material-design-icons \
+    sqlite
 
 # Haskell tools
 cabal update
