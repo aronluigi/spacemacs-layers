@@ -16,20 +16,18 @@
           osx-dictionary-dictionary-choice "English"
           osx-use-option-as-meta t)
      dash
-     octave
-     erc
      (auto-completion :variables
                       auto-completion-enable-help-tooltip t
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-sort-by-usage t)
-     better-defaults
      emacs-lisp
      git
      docker
-     (markdown :variables markdown-live-preview-engine 'vmd)
-     org
+     (markdown :variables
+               markdown-live-preview-engine 'vmd)
+     ;; org
      (shell :variables
-            shell-default-height 20
+            shell-default-height 30
             shell-default-position 'bottom
             shell-default-shell 'eshell
             shell-protect-eshell-prompt t)
@@ -44,8 +42,9 @@
      html
      javascript
      python
-     scheme
      yaml
+     (debug :variables
+            debug-additional-debuggers '("remake"))
      (haskell :variables
               haskell-completion-backend 'intero
               haskell-enable-hindent-style "johan-tibell"
@@ -60,36 +59,28 @@
      sql
      react
      java
+     (go :variables
+         gofmt-command "goimports"
+         go-tab-width 4
+         go-use-gometalinter 'nil
+         go-use-gocheck-for-testing t)
      )
    dotspacemacs-additional-packages '(all-the-icons
                                       all-the-icons-dired
                                       arduino-mode
-                                      deferred
                                       doom-themes
                                       doom-modeline
-                                      edit-indirect
                                       solaire-mode
-                                      eldoc-eval
                                       highlight-indent-guides
                                       hl-fill-column
-                                      hl-todo
                                       evil-goggles
                                       unicode-fonts
-                                      realgud ;; debugger
                                       direnv
                                       makefile-executor
                                       editorconfig
-                                      evil-anzu
-                                      powerline
-                                      scss-mode
-                                      simpleclip
                                       string-inflection
-                                      evil-string-inflection
                                       yasnippet-snippets
-                                      beacon-mode
-                                      (multiple-cursors :location (recipe :fetcher github
-                                                                          :repo "jacobono/multiple-cursors.el"
-                                                                          :branch "evil-ways")))
+                                      beacon)
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '()
    dotspacemacs-install-packages 'used-only))
@@ -112,7 +103,7 @@
                          spacemacs-light)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font '("Source Code Pro for Powerline"
-                               :size 13
+                               :size 12
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -172,19 +163,34 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
 (defun dotspacemacs/user-config ()
   ;; GLOBAL
-  (setq
-   anzu-cons-mode-line-p nil
-   shell-pop-full-span nil
-   evil-want-fine-undo t
+  (setq-default
+   ;; spell-checking
    ispell-program-name "aspell"
-   indent-buffer-modes '(scss-mode)
-   anzu-mode-line-update-function 'spacemacs/anzu-update-mode-line
+   ;; shell
+   shell-pop-full-span nil
+   ;; GoLang
+   flycheck-gometalinter-vendor t
+   flycheck-gometalinter-fast t
+   flycheck-gometalinter-test t
+   flycheck-gometalinter-deadline "10s"
+   flycheck-disabled-checkers (append flycheck-disabled-checkers '(go-megacheck))
+
+   evil-want-fine-undo t
    projectile-enable-caching t
-   projectile-use-git-grep t
-   beacon-mode t)
+   projectile-use-git-grep t)
 
   (diff-hl-flydiff-mode '(:global t))
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+
+  (use-package yasnippet-snippets
+    :ensure t
+    :after (yasnippet)
+    :config
+    (yasnippet-snippets-initialize)
+    :init
+    (setq yas-snippet-dirs nil)
+    (push yasnippet-snippets-dir yas-snippet-dirs)
+    )
 
   (use-package all-the-icons :ensure t)
   (use-package all-the-icons-dired
@@ -222,9 +228,19 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (use-package doom-modeline
     :ensure t
     :requires (all-the-icons)
-    :custom (doom-modeline-height 25)
+    :custom
+    (doom-modeline-height 25)
+    (doom-modeline-bar-width 3)
+    (doom-modeline-icon t)
+    (doom-modeline-major-mode-icon t)
+    (doom-modeline-buffer-file-name-style 'relative-from-project)
     :hook (after-init . doom-modeline-mode)
     :init (doom-modeline-mode 1))
+
+  (use-package beacon
+    :after (doom-themes)
+    :ensure t
+    :init (beacon-mode t))
 
   (use-package solaire-mode
     :ensure t
@@ -238,8 +254,12 @@ before packages are loaded. If you are unsure, you should try in setting them in
     :hook
     ((prog-mode text-mode conf-mode) . highlight-indent-guides-mode)
     (focus-in . highlight-indent-guides-auto-set-faces)
-    :custom
-    (highlight-indent-guides-method 'character))
+    :config
+    (setq highlight-indent-guides-auto-odd-face-perc 30
+          highlight-indent-guides-auto-even-face-perc 30
+          highlight-indent-guides-auto-character-face-perc 10
+          highlight-indent-guides-method 'character)
+    (setq highlight-indent-guides-responsive t))
 
   (use-package hl-fill-column
     :requires (doom-themes)
@@ -249,19 +269,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
     (setq bg (car (cdr (assq 'base0 doom-themes--colors)))
           fg (car (cdr (assq 'cyan doom-themes--colors))))
     (custom-set-faces `(hl-fill-column-face ((t (:background ,bg :foreground ,fg))))))
-
-  (use-package hl-todo
-    :hook (prog-mode . hl-todo-mode)
-    :ensure t
-    :config
-    (define-key hl-todo-mode-map (kbd "C-c p") 'hl-todo-previous)
-    (define-key hl-todo-mode-map (kbd "C-c n") 'hl-todo-next)
-    (define-key hl-todo-mode-map (kbd "C-c o") 'hl-todo-occur)
-    (define-key hl-todo-mode-map (kbd "C-c i") 'hl-todo-insert)
-    (setq hl-todo-keyword-faces
-          `(("TODO"  . ,(face-foreground 'warning))
-            ("FIXME" . ,(face-foreground 'error))
-            ("NOTE"  . ,(face-foreground 'success)))))
 
   (use-package neotree
     :custom
@@ -294,7 +301,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (use-package evil-goggles
     :ensure t
     :custom
-    (evil-goggles-duration 0.200)
+    ;; (evil-goggles-duration 0.200)
     (evil-goggles-pulse t) ; too slow
     (evil-goggles-enable-delete nil)
     (evil-goggles-enable-change nil)
@@ -302,48 +309,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
     :init
     (evil-goggles-mode)
     (evil-goggles-use-diff-faces))
-
-  ;; TODO - remove this when merged to spacemacs master
-  (use-package realgud
-    :defer t
-    :init
-    (progn
-      (defvar debug-additional-debuggers '()
-        "Additional RealGUD debuggers to be autoloaded.")
-
-      (defun spacemacs/debug-short-key-state (mode-on)
-        "Set evil-evilified-state explicitly."
-        (if mode-on
-            (evil-evilified-state)
-          (evil-normal-state)))
-
-      (defun spacemacs/debug-generate-symbol (debugger)
-        "Create RealGUD interactive function name from DEBUGGER."
-        (intern (concat "realgud:" debugger)))
-
-      (dolist (debugger (mapcar 'spacemacs/debug-generate-symbol
-                                debug-additional-debuggers))
-        (autoload debugger "realgud" nil t))
-      (advice-add 'realgud-short-key-mode-setup
-                  :before #'spacemacs/debug-short-key-state)
-      (evilified-state-evilify-map realgud:shortkey-mode-map
-        :eval-after-load realgud
-        :mode realgud-short-key-mode
-        :bindings
-        "bb" 'realgud:cmd-break
-        "bc" 'realgud:cmd-clear
-        "bd" 'realgud:cmd-delete
-        "bs" 'realgud:cmd-disable
-        "be" 'realgud:cmd-enable
-        "c" 'realgud:cmd-continue
-        "i" 'realgud:cmd-step
-        "J" 'realgud:cmd-jump
-        "o" 'realgud:cmd-finish
-        "q" 'realgud:cmd-quit
-        "r" 'realgud:cmd-restart
-        "s" 'realgud:cmd-next
-        "S" 'realgud-window-cmd-undisturb-src
-        "v" 'realgud:cmd-eval-dwim)))
 
   (use-package direnv
     :ensure t
@@ -362,7 +327,17 @@ before packages are loaded. If you are unsure, you should try in setting them in
     :ensure t
     :config
     (editorconfig-mode 1))
-  (use-package evil-string-inflection :ensure t)
+
+  (use-package string-inflection
+    :init
+    (progn
+      (spacemacs/set-leader-keys
+        "xii" 'string-inflection-all-cycle
+        "xiu" 'string-inflection-underscore
+        "xiU" 'string-inflection-upcase
+        "xik" 'string-inflection-kebab-case
+        "xic" 'string-inflection-lower-camelcase
+        "xiC" 'string-inflection-camelcase)))
   )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
