@@ -31,7 +31,9 @@
             shell-default-position 'bottom
             shell-default-shell 'eshell
             shell-protect-eshell-prompt t)
-     spell-checking
+     (spell-checking :variables
+                     spell-checking-enable-auto-dictionary nil
+                     spell-checking-enable-by-default t)
      syntax-checking
      colors
      (version-control :variables
@@ -80,7 +82,8 @@
                                       editorconfig
                                       string-inflection
                                       yasnippet-snippets
-                                      beacon)
+                                      beacon
+                                      go-tag)
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '()
    dotspacemacs-install-packages 'used-only))
@@ -166,6 +169,8 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (setq-default
    ;; spell-checking
    ispell-program-name "aspell"
+   ispell-dictionary "en_US"
+   flyspell-issue-message-flag nil
    ;; shell
    shell-pop-full-span nil
    ;; GoLang
@@ -338,6 +343,14 @@ before packages are loaded. If you are unsure, you should try in setting them in
         "xik" 'string-inflection-kebab-case
         "xic" 'string-inflection-lower-camelcase
         "xiC" 'string-inflection-camelcase)))
+
+  (use-package go-tag
+    :defer t
+    :custom
+    (go-tag-args (list "-transform" "camelcase"))
+    :init (spacemacs/set-leader-keys-for-major-mode 'go-mode
+            "rf" 'go-tag-add
+            "rF" 'go-tag-remove))
   )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
