@@ -83,6 +83,21 @@ pip install \
 # Ruby tools
 gem install pry
 ```
+
+#### GoLang
+```shell
+go get -u github.com/fatih/gomodifytags
+go get -u github.com/nsf/gocode
+go get -u github.com/rogpeppe/godef
+go get -u golang.org/x/tools/cmd/guru
+go get -u golang.org/x/tools/cmd/gorename
+go get -u golang.org/x/tools/cmd/goimports
+go get -u github.com/alecthomas/gometalinter
+go get -u github.com/mdempsky/unconvert
+
+gometalinter --install --update
+```
+
 #### Scala
 https://ensime.github.io/build_tools/sbt/#install
 
