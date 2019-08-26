@@ -23,7 +23,7 @@ Install [all-the-icons](https://github.com/domtronn/all-the-icons.el)
 
 ```shell
 # install emacs
-brew tap d12frosted/emacs-plus && brew install emacs-plus --HEAD --with-jansson --with-modern-icon --with-dbus --with-mailutils
+brew tap d12frosted/emacs-plus && brew install emacs-plus 
 
 # install some more fonts
 brew tap homebrew/cask-fonts && brew cask install font-source-code-pro
@@ -86,6 +86,8 @@ gem install pry
 
 #### GoLang
 ```shell
+xcode-select --install
+go get -u github.com/go-delve/delve/cmd/dlv
 go get -u github.com/fatih/gomodifytags
 go get -u github.com/nsf/gocode
 go get -u github.com/rogpeppe/godef
@@ -95,6 +97,7 @@ go get -u golang.org/x/tools/cmd/goimports
 go get -u github.com/alecthomas/gometalinter
 go get -u github.com/mdempsky/unconvert
 
+gocode set autobuild true
 gometalinter --install --update
 ```
 
