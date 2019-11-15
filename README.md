@@ -23,7 +23,7 @@ Install [all-the-icons](https://github.com/domtronn/all-the-icons.el)
 
 ```shell
 # install emacs
-brew tap d12frosted/emacs-plus && brew install emacs-plus 
+brew tap d12frosted/emacs-plus && brew install emacs-plus --with-jansson
 
 # install some more fonts
 brew tap homebrew/cask-fonts && brew cask install font-source-code-pro
@@ -94,6 +94,7 @@ go get -u github.com/rogpeppe/godef
 go get -u golang.org/x/tools/cmd/guru
 go get -u golang.org/x/tools/cmd/gorename
 go get -u golang.org/x/tools/cmd/goimports
+go get golang.org/x/tools/gopls@latest
 go get -u github.com/alecthomas/gometalinter
 go get -u github.com/mdempsky/unconvert
 
@@ -104,3 +105,8 @@ gometalinter --install --update
 #### Scala
 https://ensime.github.io/build_tools/sbt/#install
 
+# DEV
+#### GoLang
+```shell
+sh ./.emacs.d/private/+leodev/bin/golang.sh
+```
