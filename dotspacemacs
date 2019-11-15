@@ -47,7 +47,7 @@
      python
      yaml
      (debug :variables
-            debug-additional-debuggers '("remake"))
+            debug-additional-debuggers '("remake" "gub"))
      (haskell :variables
               haskell-completion-backend 'intero
               haskell-enable-hindent-style "johan-tibell"
@@ -84,14 +84,15 @@
                                       string-inflection
                                       yasnippet-snippets
                                       beacon
-                                      go-tag)
+                                      go-tag
+                                      flyspell-lazy)
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '()
    dotspacemacs-install-packages 'used-only))
 
 (defun dotspacemacs/init ()
   (setq-default
-   dotspacemacs-elpa-https t
+   dotspacemacs-elpa-https nil
    dotspacemacs-elpa-timeout 5
    dotspacemacs-check-for-update nil
    dotspacemacs-elpa-subdirectory nil
@@ -102,15 +103,13 @@
                                 (projects . 7))
    dotspacemacs-startup-buffer-responsive t
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(doom-vibrant
-                         spacemacs-dark
-                         spacemacs-light)
+   dotspacemacs-themes '(doom-one)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font '("Source Code Pro for Powerline"
                                :size 12
                                :weight normal
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.0)
    dotspacemacs-leader-key "SPC"
    dotspacemacs-emacs-command-key "SPC"
    dotspacemacs-ex-command-key ":"
@@ -143,9 +142,9 @@
    dotspacemacs-inactive-transparency 90
    dotspacemacs-show-transient-state-title t
    dotspacemacs-show-transient-state-color-guide t
-   dotspacemacs-mode-line-unicode-symbols t
-   dotspacemacs-smooth-scrolling t
-   dotspacemacs-line-numbers 'relative
+   dotspacemacs-mode-line-unicode-symbols nil
+   dotspacemacs-smooth-scrolling nil
+   dotspacemacs-line-numbers t
    dotspacemacs-folding-method 'evil
    dotspacemacs-smartparens-strict-mode nil
    dotspacemacs-smart-closing-parenthesis nil
@@ -163,10 +162,22 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  ;; fix a problem with X11 to windows
+  ;; https://emacs.stackexchange.com/questions/41021/emacs-26-1-rc1-display-issues-over-ssh-x11-with-xming-vcxsrv
+  ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=32306
+  (setq default-frame-alist
+        (append default-frame-alist '((inhibit-double-buffering . t))))
   )
 
 (defun dotspacemacs/user-config ()
   ;; GLOBAL
+
+  ;; If you experience freezing, decrease this. If you experience stuttering, increase this.
+  ;; 16mb = 16777216
+  ;; 256mb = 268435456
+  ;; 512mb = 536870912
+  (setq gc-cons-threshold 268435456)
+
   (setq-default
    ;; spell-checking
    ispell-program-name "aspell"
@@ -183,10 +194,12 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
    evil-want-fine-undo t
    projectile-enable-caching t
-   projectile-use-git-grep t)
+   projectile-use-git-grep t
+   inhibit-compacting-font-caches t)
 
   (diff-hl-flydiff-mode '(:global t))
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
   (use-package yasnippet-snippets
     :ensure t
@@ -215,7 +228,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
     (doom-themes-enable-italic t)
     (nlinum-highlight-current-line t)
     :config
-    (load-theme 'doom-vibrant t)
+    (load-theme 'doom-one t)
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
     ;; Enable custom neotree theme (all-the-icons must be installed!)
@@ -253,7 +266,9 @@ before packages are loaded. If you are unsure, you should try in setting them in
     :hook
     ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
     (minibuffer-setup . solaire-mode-in-minibuffer)
-    :config (solaire-mode-swap-bg))
+    :config
+    (solaire-global-mode +1)
+    (solaire-mode-swap-bg))
 
   (use-package highlight-indent-guides
     :ensure t
@@ -307,12 +322,11 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (use-package evil-goggles
     :ensure t
     :custom
-    ;; (evil-goggles-duration 0.200)
+    ;; (evil-goggles-duration 0.250)
     (evil-goggles-pulse t) ; too slow
     (evil-goggles-enable-delete nil)
     (evil-goggles-enable-change nil)
-    :config (setq evil-goggles-pulse nil)
-    :init
+    :config
     (evil-goggles-mode)
     (evil-goggles-use-diff-faces))
 
@@ -352,6 +366,18 @@ before packages are loaded. If you are unsure, you should try in setting them in
     :init (spacemacs/set-leader-keys-for-major-mode 'go-mode
             "rf" 'go-tag-add
             "rF" 'go-tag-remove))
+
+  (use-package flyspell-lazy
+    :ensure t
+    :after (flyspell)
+    :init
+    (add-to-list 'ispell-extra-args "--sug-mode=ultra")
+    :config
+    (flyspell-lazy-mode 1)
+    (setq ;; Be a little more aggressive than the lazy defaults
+     flyspell-lazy-idle-seconds 2 ;; This scans just the recent changes
+     flyspell-lazy-window-idle-seconds 6 ;; This scans the whole window
+     ))
   )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
